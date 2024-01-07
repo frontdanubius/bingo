@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .bingo-globe {
+      width: 200px;
+      height: 200px;
+      border: 2px solid #000;
+      border-radius: 50%;
+      position: relative;
+      margin: 20px;
+    }
+
+    .ball {
+      width: 30px;
+      height: 30px;
+      background-color: #3498db;
+      border-radius: 50%;
+      position: absolute;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      color: #fff;
+    }
+  </style>
+  <title>Bingo Draw</title>
+</head>
+<body>
+  <div class="bingo-globe" id="globe1"></div>
+  <div class="bingo-globe" id="globe2"></div>
+  <div>
+    <label for="globe1Balls">Number of Balls in Globe 1 (1-59): </label>
+    <input type="number" id="globe1Balls" min="1" max="59" value="59">
+  </div>
+  <div>
+    <label for="globe2Balls">Number of Balls in Globe 2 (1-12): </label>
+    <input type="number" id="globe2Balls" min="1" max="12" value="12">
+  </div>
+  <button onclick="startDraw()">Start Draw</button>
+
+  <script>
+    function startDraw() {
+      const globe1Balls = document.getElementById('globe1Balls').value;
+      const globe2Balls = document.getElementById('globe2Balls').value;
+
+      drawBalls('globe1', globe1Balls);
+      setTimeout(() => drawBalls('globe2', globe2Balls), 10 * (globe1Balls + 1));
+    }
+
+    function drawBalls(globeId, numBalls) {
+      const globe = document.getElementById(globeId);
+      
+      for (let i = 1; i <= numBalls; i++) {
+        setTimeout(() => {
+          const ball = document.createElement('div');
+          ball.classList.add('ball');
+          ball.textContent = i;
+          const angle = (360 / numBalls) * (i - 1);
+          ball.style.transform = `rotate(${angle}deg) translate(80px) rotate(-${angle}deg)`;
+          globe.appendChild(ball);
+        }, 10 * i);
+      }
+    }
+  </script>
+</body>
+</html>

@@ -20,6 +20,7 @@
       border-radius: 50%;
       position: relative;
       margin: 20px;
+      overflow: hidden;
     }
 
     .ball {
@@ -33,6 +34,13 @@
       justify-content: center;
       font-weight: bold;
       color: #fff;
+      animation: rotateBall 1s ease-in-out forwards;
+    }
+
+    @keyframes rotateBall {
+      to {
+        transform: rotate(360deg);
+      }
     }
   </style>
   <title>Bingo Draw</title>
@@ -43,44 +51,31 @@
   <div>
     <label for="globe1Balls">Number of Balls in Globe 1 (1-69): </label>
     <input type="number" id="globe1Balls" min="1" max="69" value="69">
+    <button onclick="drawBalls('globe1')">Draw Balls</button>
   </div>
   <div>
     <label for="globe2Balls">Number of Balls in Globe 2 (1-12): </label>
     <input type="number" id="globe2Balls" min="1" max="12" value="12">
+    <button onclick="drawBalls('globe2')">Draw Balls</button>
   </div>
-  <button onclick="startDraw()">Start Draw</button>
 
   <script>
-    function startDraw() {
-      const globe1Balls = document.getElementById('globe1Balls').value;
-      const globe2Balls = document.getElementById('globe2Balls').value;
-
-      moveBalls('globe1', globe1Balls);
-      moveBalls('globe2', globe2Balls);
-    }
-
-    function moveBalls(globeId, numBalls) {
+    function drawBalls(globeId) {
+      const numBalls = document.getElementById(`${globeId}Balls`).value;
       const globe = document.getElementById(globeId);
-      const balls = [];
 
       for (let i = 1; i <= numBalls; i++) {
         const ball = document.createElement('div');
         ball.classList.add('ball');
         ball.textContent = i;
-        balls.push(ball);
+        const angle = (360 / numBalls) * (i - 1);
+        ball.style.transform = `rotate(${angle}deg) translate(80px) rotate(-${angle}deg)`;
         globe.appendChild(ball);
-      }
 
-      setTimeout(() => releaseBalls(globe, balls), 2000);
-    }
-
-    function releaseBalls(globe, balls) {
-      balls.forEach((ball, index) => {
         setTimeout(() => {
-          ball.style.animation = 'releaseBall 1s ease-in-out';
-          ball.style.transform = `translate(${Math.random() * 200 - 100}px, ${Math.random() * 200 - 100}px)`;
-        }, 10 * index);
-      });
+          ball.style.transform = `rotate(${angle + 360}deg) translate(80px) rotate(-${angle + 360}deg)`;
+        }, 10 * i);
+      }
     }
   </script>
 </body>
